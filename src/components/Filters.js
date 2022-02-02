@@ -7,7 +7,7 @@ function Filters() {
   const [column, setColumn] = useState('population');
   const [operator, setOperator] = useState('maior que');
   const [valueFilter, setValueFilter] = useState(0);
-  const [filterOptions] = useState([
+  const [filterOptions, setFilterOptions] = useState([
     'population',
     'orbital_period',
     'diameter',
@@ -27,6 +27,8 @@ function Filters() {
       return planet[column] === valueFilter;
     });
     setPlanetFiltered(filteredByNum);
+    const newFilterOptions = filterOptions.filter((option) => option !== column);
+    setFilterOptions(newFilterOptions);
   };
 
   return (
