@@ -1,20 +1,33 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import planetsContext from '../context/planetsContext';
 
 function Filters() {
-  const {
-    planets,
-    filterOptions,
-    operatorOptions,
-    setColumn,
-    setOperator,
-    setValueFilter,
-    setPlanetFiltered,
-    valueFilter,
-    operator,
-    column,
-    planetFiltered,
-  } = useContext(planetsContext);
+  const { planets, setPlanetFiltered } = useContext(planetsContext);
+
+  const [column, setColumn] = useState('population');
+  const [operator, setOperator] = useState('maior que');
+  const [valueFilter, setValueFilter] = useState(0);
+  const [filterOptions] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
+  const [operatorOptions] = useState(['maior que', 'menor que', 'igual a']);
+
+  const handleFilterByNum = () => {
+    const filteredByNum = planets.filter((planet) => {
+      if (operator === 'maior que') {
+        return planet[column] > valueFilter * 1;
+      }
+      if (operator === 'menor que') {
+        return planet[column] < valueFilter * 1;
+      }
+      return planet[column] === valueFilter;
+    });
+    setPlanetFiltered(filteredByNum);
+  };
 
   return (
     <div style={ { display: 'flex' } }>
@@ -53,6 +66,7 @@ function Filters() {
         data-testid="button-filter"
         onClick={ (e) => {
           e.preventDefault();
+          handleFilterByNum();
         } }
       >
         Filtrar
